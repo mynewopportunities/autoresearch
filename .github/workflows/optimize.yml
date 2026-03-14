@@ -1,0 +1,48 @@
+name: Cold Email Optimizer
+
+on:
+  schedule:
+    # Runs every hour at :00
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    # Allow manual trigger from GitHub UI for testing
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed to git commit state/results back
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so git reset works correctly
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "email-optimizer[bot]"
+          git config user.email "email-optimizer[bot]@users.noreply.github.com"
+
+      - name: Pull latest state
+        run: git pull --rebase origin main
+
+      - name: Run optimizer
+        env:
+          APOLLO_API_KEY:    ${{ secrets.APOLLO_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python run.py
+
+      - name: Push state back to repo
+        run: |
+          git push origin main
+        # If nothing changed (e.g. still WAITING), this is a no-op
