@@ -26,7 +26,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install anthropic requests
+        run: pip install openai requests
 
       - name: Configure git identity
         run: |
@@ -38,8 +38,8 @@ jobs:
 
       - name: Run optimizer
         env:
-          APOLLO_API_KEY:    ${{ secrets.APOLLO_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          APOLLO_API_KEY:      ${{ secrets.APOLLO_API_KEY }}
+          OPENROUTER_API_KEY:  ${{ secrets.OPENROUTER_API_KEY }}
         run: python run.py
 
       - name: Push state back to repo

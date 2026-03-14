@@ -3,7 +3,7 @@ name = "email-optimizer"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
-    "anthropic>=0.49.0",
+    "openai>=1.75.0",
     "requests>=2.32.0",
 ]
 

@@ -197,8 +197,8 @@ def main():
     if not os.environ.get("APOLLO_API_KEY"):
         print("ERROR: APOLLO_API_KEY environment variable not set.")
         sys.exit(1)
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("ERROR: ANTHROPIC_API_KEY environment variable not set.")
+    if not os.environ.get("OPENROUTER_API_KEY"):
+        print("ERROR: OPENROUTER_API_KEY environment variable not set.")
         sys.exit(1)
 
     state = load_state()

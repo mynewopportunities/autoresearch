@@ -6,7 +6,7 @@ config.py — Experiment configuration. Edit these once to set up your campaign.
 
 # The Apollo saved-list ID to pull prospects from for each experiment.
 # Find it in Apollo → Lists → copy the ID from the URL.
-CONTACT_LIST_ID = "REPLACE_WITH_YOUR_LIST_ID"
+CONTACT_LIST_ID = "69b52f6c2c693100113b4dc6"
 
 # How many contacts to enroll per experiment batch.
 # Larger = more statistical power but burns more contacts per test.
@@ -33,5 +33,13 @@ MIN_SENT_TO_EVALUATE = 20
 # Baseline reply rate before any experiments (set after first manual send, or 0).
 BASELINE_REPLY_RATE = 0.0
 
+# OpenRouter base URL (OpenAI-compatible)
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+
 # Model used by the agent to propose new copy variants.
-AGENT_MODEL = "claude-opus-4-6"
+# Any model available on OpenRouter works here, e.g.:
+#   "anthropic/claude-opus-4-6"
+#   "openai/gpt-4o"
+#   "google/gemini-2.5-pro"
+#   "meta-llama/llama-4-maverick"
+AGENT_MODEL = "google/gemini-2.5-pro"

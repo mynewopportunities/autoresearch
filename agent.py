@@ -5,10 +5,11 @@ Reads program.md for strategy, reads results.tsv for history,
 reads the current email_copy.md, and writes a new version.
 """
 
-import anthropic
+import os
 import re
+from openai import OpenAI
 from pathlib import Path
-from config import AGENT_MODEL
+from config import AGENT_MODEL, OPENROUTER_BASE_URL
 
 
 def _read(path: str) -> str:
@@ -57,15 +58,20 @@ Rules:
 - Apollo merge tags available: {{{{first_name}}}}, {{{{last_name}}}}, {{{{company}}}}, {{{{title}}}}, {{{{sender_name}}}}, {{{{sender_email}}}}
 """
 
-    client = anthropic.Anthropic()
-    message = client.messages.create(
+    client = OpenAI(
+        api_key=os.environ["OPENROUTER_API_KEY"],
+        base_url=OPENROUTER_BASE_URL,
+    )
+    message = client.chat.completions.create(
         model=AGENT_MODEL,
         max_tokens=1024,
-        messages=[{"role": "user", "content": user_prompt}],
-        system=system_prompt,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
     )
 
-    new_copy = message.content[0].text.strip()
+    new_copy = message.choices[0].message.content.strip()
     _write("email_copy.md", new_copy)
     print(f"Agent proposed new copy ({len(new_copy)} chars)")
     return new_copy
